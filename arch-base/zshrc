@@ -13,8 +13,6 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 setopt appendhistory
-source /usr/share/doc/pkgfile/command-not-found.zsh
-#source /home/alecsnyder/.zlogin
 unsetopt beep
 setopt autocd correct completealiases HIST_IGNORE_DUPS
 
