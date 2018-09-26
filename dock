@@ -1,3 +1,4 @@
 #!/bin/bash
 
-docker run -it --mount type=bind,source=`pwd`,target=/home/docker/workspace $1 zsh
+# docker run -it --mount type=bind,source=`pwd`,target=/home/docker/workspace $1 zsh
+python dock.py $@
