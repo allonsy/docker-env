@@ -21,17 +21,48 @@ def run_container_interactive_mount(container):
         "zsh"    
     ])
 
-def build_container(container, *tags):
+def build_container(container, *tags, clean=False):
     print("building container: " + container + " with tags: " + str(tags))
     os.chdir(os.path.join(file_dir, container))
     cmd = ["docker", "build", "-t", container]
+    if clean:
+        cmd.append("--no-cache")
     for tag in tags:
         cmd.append("-t")
         cmd.append(tag)
     cmd.append(".")
     run(cmd)
 
+def run_oneshot(container, *cmds):
+    cmd = ["docker", "run", container]
+    for c in cmds:
+        cmd.append(c)
+    run(cmd)
+
+def clean():
+    print("Pruning containers...")
+    cmd_containers = ["docker", "container", "prune", "-f"]
+    run(cmd_containers)
+    
+    print("Pruning images...")
+    cmd_images = ["docker", "image", "prune", "-f"]
+    run(cmd_images)
+
+def edit(container):
+    cmd = ["vim", os.path.join(file_dir, container, "Dockerfile")]
+    run(cmd)
+
+
+
 if ARGS[1] == "build":
     build_container(ARGS[2], *ARGS[3:])
+elif ARGS[1] == "clean-build":
+    build_container(ARGS[2], *ARGS[3:], clean=True)
+elif ARGS[1] == "run":
+    run_oneshot(ARGS[2], *ARGS[3:])
+elif ARGS[1] == "clean":
+    clean()
+elif ARGS[1] == "edit":
+    edit(ARGS[2])
 else:
     run_container_interactive_mount(ARGS[1])
