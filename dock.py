@@ -13,7 +13,8 @@ def run_container_interactive_mount(container):
     cwd = get_cwd()
     run([
         "docker", 
-        "run", 
+        "run",
+        "--rm",
         "-it", 
         "--mount",
         f"type=bind,source={cwd},target=/home/docker/workspace",
@@ -40,14 +41,10 @@ def run_oneshot(container, *cmds):
     run(cmd)
 
 def clean():
-    print("Pruning containers...")
-    cmd_containers = ["docker", "container", "prune", "-f"]
+    print("Pruning system...")
+    cmd_containers = ["docker", "system", "prune", "-f"]
     run(cmd_containers)
     
-    print("Pruning images...")
-    cmd_images = ["docker", "image", "prune", "-f"]
-    run(cmd_images)
-
 def edit(container):
     cmd = ["vim", os.path.join(file_dir, container, "Dockerfile")]
     run(cmd)
